@@ -365,18 +365,76 @@ function oneRound(string){
 
 
 
+//============================
+//============================
+// DAY 11
+//============================
+//============================
 
+function increment(string){
+	var strSplit = string.split('');
+	strSplit[strSplit.length-1] = String.fromCharCode(strSplit[strSplit.length-1].charCodeAt() + 1);
+	for(var i = strSplit.length - 1; i > 0; i--){
+		if (strSplit[i].charCodeAt() == 123){
+			strSplit[i] = "a";
+			strSplit[i - 1] = String.fromCharCode(strSplit[i-1].charCodeAt() + 1);
+		} 
+	}
+	return strSplit.join('');
+}
 
+function checkStraight(string){
+	var charCodeArray = string.split("").map(function(x){return x.charCodeAt()})
+	for (i = charCodeArray.length; i >= 2; i--){
+		if (charCodeArray[i] - charCodeArray[i - 1] == 1 && charCodeArray[i - 1] - charCodeArray[i - 2] == 1){
+			return true;
+		}
+	}
+	return false;
+}
 
+function checkIOL(string){
+	if (string.indexOf(/[iol]/) < 0){
+		return true
+	}
+	return false;
+}
 
+function checkPairs(string){
+	var pairs = string.match(/(\w)\1+/g);
+	if (pairs != null && pairs.length >= 2){
+		return true
+	}
+	return false;
+}
 
+function adventEleven(string){
+	debugger;
+	var pwd = string;
+	while(checkPairs(pwd) == false || checkIOL(pwd) == false || checkStraight(pwd) == false){
+		pwd = (increment(pwd));
+	}
+	return pwd;
+}
 
-
-
-
-
-
-
-
+function adventTwelve(obj, ignoreRed){
+	debugger;
+	if (ignoreRed && typeof obj === "object" && !Array.isArray(obj)){
+		for (key in obj){
+			if (obj[key] === "red"){
+				return 0;
+			}
+		}
+	}
+	var total = 0;
+	for (key in obj){
+		if (typeof obj[key] === "object"){
+			total += adventTwelve(obj[key], ignoreRed);
+		} else if (typeof obj[key] === "number"){
+			total += obj[key];
+		}
+	}
+	return total;
+}
 
 
